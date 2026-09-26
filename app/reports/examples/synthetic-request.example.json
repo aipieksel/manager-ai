@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "action": "report.request",
+  "reportKey": "site.ai_referrals",
+  "invocationKey": "slack:report:66686ffeaf940031635bdfde096ba8c91f326293efa9d048acf4cdae60b4548a",
+  "source": {
+    "kind": "mention",
+    "teamId": "TSYNTHETIC01",
+    "apiAppId": "ASYNTHETIC01",
+    "userId": "USYNTHETIC01",
+    "channelId": "CSYNTHETIC01",
+    "sourceEventId": "EvSYNTHETIC01",
+    "messageTs": "1788782400.000001",
+    "rootThreadTs": "1788782300.000001"
+  },
+  "arguments": {
+    "mode": "refresh_standard"
+  }
+}

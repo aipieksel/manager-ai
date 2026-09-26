@@ -1,0 +1,22 @@
+[Unit]
+Description=ManagerAI Slack Socket Mode worker
+After=network-online.target managerai.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/dev/repos/managerai
+EnvironmentFile=%h/.config/managerai-slack/service.env
+ExecStart=/usr/bin/node %h/dev/repos/managerai/slack/worker.mjs
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.config/managerai-slack %h/.local/share/managerai-slack
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=default.target

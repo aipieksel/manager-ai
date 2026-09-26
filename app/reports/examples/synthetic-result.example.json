@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "reportKey": "site.ai_referrals",
+  "runId": "run_synthetic_example_only",
+  "generatedAt": "2026-09-07T12:00:00Z",
+  "quality": "complete",
+  "sourceCoverage": {
+    "ga4": {
+      "availableFrom": "2026-08-01",
+      "availableThrough": "2026-09-06",
+      "latestCompleteDate": "2026-09-06",
+      "timezone": "Africa/Johannesburg",
+      "collectedAt": "2026-09-07T11:55:00Z",
+      "coverageStatus": "complete",
+      "missingIntervals": []
+    },
+    "firstParty": {
+      "availableFrom": "2026-08-01",
+      "availableThrough": "2026-09-06",
+      "latestCompleteDate": "2026-09-06",
+      "timezone": "Africa/Johannesburg",
+      "collectedAt": "2026-09-07T11:56:00Z",
+      "coverageStatus": "complete",
+      "missingIntervals": []
+    }
+  },
+  "metrics": {
+    "ga4": {
+      "sessions": 100,
+      "engagedSessions": 60,
+      "engagementRate": 0.6
+    },
+    "firstParty": {
+      "visits": 120
+    }
+  },
+  "warnings": [],
+  "artifact": {
+    "artifactId": "artifact_synthetic_example_only",
+    "filename": "website-ai-referrals-ga4-and-first-party-2026-08-01-to-2026-09-06.xlsx",
+    "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "byteLength": 12345,
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "provenance": {
+    "referenceArtifactId": "reference_synthetic_example_only",
+    "referenceSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "skillCommit": "cccccccccccccccccccccccccccccccccccccccc",
+    "reportCodeCommit": "dddddddddddddddddddddddddddddddddddddddd",
+    "ga4SnapshotSha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "firstPartySnapshotSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+  },
+  "validation": {
+    "totalsReconciled": true,
+    "formulaErrorCount": 0,
+    "packageIntegrity": true,
+    "visualReview": "passed",
+    "visualEvidenceRef": "evidence_synthetic_example_only"
+  }
+}

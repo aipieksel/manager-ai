@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Assistant AI referral report normalized request v1",
+  "description": "Proposed internal worker-to-bridge contract. A valid schema is not authorization; require authenticated transport and server-side report grants.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "action": {
+      "const": "report.request"
+    },
+    "reportKey": {
+      "const": "site.ai_referrals"
+    },
+    "invocationKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^slack:report:[a-f0-9]{64}$"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "mention",
+            "slash_command"
+          ]
+        },
+        "teamId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^T[A-Z0-9]+$"
+        },
+        "apiAppId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^A[A-Z0-9]+$"
+        },
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[UW][A-Z0-9]+$"
+        },
+        "channelId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[CG][A-Z0-9]+$"
+        },
+        "sourceEventId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "messageTs": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9]{10,}\\.[0-9]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rootThreadTs": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9]{10,}\\.[0-9]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "teamId",
+        "apiAppId",
+        "userId",
+        "channelId",
+        "sourceEventId",
+        "messageTs",
+        "rootThreadTs"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "mention"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "messageTs": {
+                "type": "string",
+                "pattern": "^[0-9]{10,}\\.[0-9]{6}$"
+              },
+              "rootThreadTs": {
+                "type": "string",
+                "pattern": "^[0-9]{10,}\\.[0-9]{6}$"
+              },
+              "sourceEventId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 180,
+                "pattern": "^Ev[A-Za-z0-9]+$"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "messageTs": {
+                "type": "null"
+              },
+              "rootThreadTs": {
+                "type": "null"
+              },
+              "sourceEventId": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "arguments": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "refresh_standard"
+        }
+      },
+      "required": [
+        "mode"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "action",
+    "reportKey",
+    "invocationKey",
+    "source",
+    "arguments"
+  ]
+}

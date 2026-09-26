@@ -1,0 +1,53 @@
+display_information:
+  name: Assistant
+  description: Secure Slack router for the Agent Command Center
+  background_color: "#1f2a22"
+features:
+  slash_commands:
+    - command: /ai-referrals
+      description: Generate the standard Website AI referral workbook
+      usage_hint: No arguments
+      should_escape: false
+  agent_view:
+    agent_description: Route work to the right Agent Command Center agent from Slack.
+    suggested_prompts:
+      - title: Plan work
+        message: Nairobi, turn this thread into a clear execution plan.
+      - title: Choose an agent
+        message: Which Agent Command Center agent should handle this?
+  app_home:
+    home_tab_enabled: true
+    messages_tab_enabled: true
+    messages_tab_read_only_enabled: false
+  bot_user:
+    display_name: Assistant
+    always_online: true
+oauth_config:
+  scopes:
+    bot:
+      - commands
+      - files:write
+      - files:read
+      - channels:read
+      - groups:read
+      - app_mentions:read
+      - channels:history
+      - chat:write
+      - groups:history
+      - im:history
+      - im:read
+      - im:write
+      - assistant:write
+      - reactions:write
+settings:
+  event_subscriptions:
+    bot_events:
+      - app_home_opened
+      - app_mention
+      - assistant_thread_started
+      - message.im
+  interactivity:
+    is_enabled: false
+  org_deploy_enabled: false
+  socket_mode_enabled: true
+  token_rotation_enabled: false

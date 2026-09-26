@@ -1,0 +1,425 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Website AI referral deliverable result v1",
+  "description": "Proposed artifact-ready result only. Failed jobs use separate error states. Validate arithmetic, provenance, dates, policy and artifact bytes in code as well as this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "reportKey": {
+      "const": "site.ai_referrals"
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 180
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "quality": {
+      "enum": [
+        "complete",
+        "with_warnings"
+      ]
+    },
+    "sourceCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ga4": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "availableFrom": {
+              "type": "string",
+              "format": "date"
+            },
+            "availableThrough": {
+              "type": "string",
+              "format": "date"
+            },
+            "latestCompleteDate": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "timezone": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "collectedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "coverageStatus": {
+              "enum": [
+                "complete",
+                "partial"
+              ]
+            },
+            "missingIntervals": {
+              "type": "array",
+              "maxItems": 1000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "through": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "from",
+                  "through",
+                  "reason"
+                ]
+              }
+            }
+          },
+          "required": [
+            "availableFrom",
+            "availableThrough",
+            "latestCompleteDate",
+            "timezone",
+            "collectedAt",
+            "coverageStatus",
+            "missingIntervals"
+          ]
+        },
+        "firstParty": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "availableFrom": {
+              "type": "string",
+              "format": "date"
+            },
+            "availableThrough": {
+              "type": "string",
+              "format": "date"
+            },
+            "latestCompleteDate": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "timezone": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "collectedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "coverageStatus": {
+              "enum": [
+                "complete",
+                "partial"
+              ]
+            },
+            "missingIntervals": {
+              "type": "array",
+              "maxItems": 1000,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "through": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "from",
+                  "through",
+                  "reason"
+                ]
+              }
+            }
+          },
+          "required": [
+            "availableFrom",
+            "availableThrough",
+            "latestCompleteDate",
+            "timezone",
+            "collectedAt",
+            "coverageStatus",
+            "missingIntervals"
+          ]
+        }
+      },
+      "required": [
+        "ga4",
+        "firstParty"
+      ]
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ga4": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sessions": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "engagedSessions": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "engagementRate": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "sessions",
+            "engagedSessions",
+            "engagementRate"
+          ]
+        },
+        "firstParty": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "visits": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "visits"
+          ]
+        }
+      },
+      "required": [
+        "ga4",
+        "firstParty"
+      ]
+    },
+    "warnings": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-z][a-z0-9_]+$"
+          },
+          "source": {
+            "enum": [
+              "ga4",
+              "first_party",
+              "report"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "code",
+          "source",
+          "message"
+        ]
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "artifactId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "filename": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*\\.xlsx$"
+        },
+        "mimeType": {
+          "const": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        },
+        "byteLength": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "artifactId",
+        "filename",
+        "mimeType",
+        "byteLength",
+        "sha256"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "referenceArtifactId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "referenceSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "skillCommit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "reportCodeCommit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "ga4SnapshotSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "firstPartySnapshotSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "referenceArtifactId",
+        "referenceSha256",
+        "skillCommit",
+        "reportCodeCommit",
+        "ga4SnapshotSha256",
+        "firstPartySnapshotSha256"
+      ]
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "totalsReconciled": {
+          "const": true
+        },
+        "formulaErrorCount": {
+          "const": 0
+        },
+        "packageIntegrity": {
+          "const": true
+        },
+        "visualReview": {
+          "const": "passed"
+        },
+        "visualEvidenceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        }
+      },
+      "required": [
+        "totalsReconciled",
+        "formulaErrorCount",
+        "packageIntegrity",
+        "visualReview",
+        "visualEvidenceRef"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "reportKey",
+    "runId",
+    "generatedAt",
+    "quality",
+    "sourceCoverage",
+    "metrics",
+    "warnings",
+    "artifact",
+    "provenance",
+    "validation"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "quality": {
+            "const": "complete"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "warnings": {
+            "type": "array",
+            "maxItems": 0
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "warnings": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}

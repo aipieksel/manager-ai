@@ -1,0 +1,24 @@
+[Unit]
+Description=ManagerAI VPS application
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/projects/manager-ai
+Environment=HOME=%h
+Environment=WRANGLER_SEND_METRICS=false
+Environment=XDG_CONFIG_HOME=%h/.local/share/managerai/xdg-config
+Environment=XDG_CACHE_HOME=%h/.local/share/managerai/xdg-cache
+Environment=WRANGLER_LOG_PATH=%h/.local/share/managerai/wrangler.log
+ExecStart=%h/projects/manager-ai/node_modules/.bin/wrangler dev --config %h/projects/manager-ai/dist/server/wrangler.json --local --ip 172.17.0.1 --port 13006 --persist-to %h/.local/share/managerai --env-file %h/.config/managerai/app.env --log-level warn --show-interactive-dev-session=false
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.local/share/managerai %h/projects/manager-ai/.wrangler %h/projects/manager-ai/.sites-runtime
+
+[Install]
+WantedBy=default.target

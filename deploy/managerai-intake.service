@@ -1,0 +1,23 @@
+[Unit]
+Description=ManagerAI signed webhook intake gateway
+After=network-online.target managerai.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/dev/repos/managerai
+EnvironmentFile=%h/.config/managerai-intake/intake.env
+ExecStart=/usr/bin/python3 %h/dev/repos/managerai/intake/gateway.py
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.local/share/managerai-intake %h/.config/managerai-intake
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=default.target

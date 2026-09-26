@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "id": "prj_example",
+      "name": "Example Project",
+      "slug": "example-project",
+      "description": "Replace this complete example with your own repository and runtime.",
+      "objective": "Review and maintain the configured project within its documented boundaries.",
+      "status": "active",
+      "repositoryRef": "your-account/your-project",
+      "checkoutPath": "/home/your-user/projects/example-project",
+      "codeServerUrl": "https://code.example.com/",
+      "vncUrl": "https://desktop.example.com/",
+      "launcherAlias": "codex-example-project",
+      "tmuxSession": "example-project",
+      "handoffUrl": "https://docs.example.com/agent.md",
+      "instructions": [
+        "AGENTS.md"
+      ],
+      "skills": [],
+      "services": [
+        "example-project.service"
+      ],
+      "urls": [
+        "https://app.example.com/"
+      ],
+      "environmentFiles": [],
+      "variables": [
+        "EXAMPLE_PROJECT_ORIGIN"
+      ],
+      "transport": {
+        "type": "local"
+      },
+      "notes": "Example only. Supply paths and endpoints you control before seeding.",
+      "successDefinition": "A verified change or actionable review with evidence, within the registered project boundary.",
+      "documents": []
+    }
+  ],
+  "shared": {
+    "codeServerOrigin": "https://code.example.com",
+    "vncUrl": "https://desktop.example.com/",
+    "reportUrl": "https://docs.example.com/",
+    "contactUrl": "https://hooks.example.com/v1/agent-contact"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1787527085239,
+      "tag": "0000_opposite_the_executioner",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1787531499152,
+      "tag": "0001_strange_betty_brant",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1787547118677,
+      "tag": "0002_parallel_ultragirl",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1787557939526,
+      "tag": "0003_clammy_aaron_stack",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1787558573645,
+      "tag": "0004_third_lady_deathstrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1787659629702,
+      "tag": "0005_absent_korg",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1787676034680,
+      "tag": "0006_assistant_trigger_contracts",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1788794852440,
+      "tag": "0007_deactivate_obsolete_notification_contracts",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1788794855639,
+      "tag": "0008_ai_referral_reports",
+      "breakpoints": true
+    }
+  ]
+}

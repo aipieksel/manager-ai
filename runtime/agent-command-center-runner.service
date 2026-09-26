@@ -1,0 +1,21 @@
+[Unit]
+Description=Agent Command Center allowlisted runner
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=agentmgr
+Group=agentmgr
+EnvironmentFile=/etc/agent-command-center/runner.env
+ExecStart=/usr/bin/python3 /opt/agent-command-center/runner.py
+Restart=on-failure
+RestartSec=3
+PrivateTmp=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

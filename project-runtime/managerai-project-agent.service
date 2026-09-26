@@ -1,0 +1,16 @@
+[Unit]
+Description=ManagerAI repository-scoped Codex chat runner
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/projects/manager-ai
+EnvironmentFile=%h/.config/managerai-project-agent/runtime.env
+ExecStart=/usr/bin/python3 %h/projects/manager-ai/project-runtime/runner.py
+Restart=on-failure
+RestartSec=5s
+UMask=0077
+
+[Install]
+WantedBy=default.target

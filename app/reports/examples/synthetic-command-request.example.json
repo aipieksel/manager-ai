@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "action": "report.request",
+  "reportKey": "site.ai_referrals",
+  "invocationKey": "slack:report:c1643a0143943d303fb0f39dd825f43afbf9f76af3a9f4ab4433cd966657cf67",
+  "source": {
+    "kind": "slash_command",
+    "teamId": "TSYNTHETIC01",
+    "apiAppId": "ASYNTHETIC01",
+    "userId": "USYNTHETIC01",
+    "channelId": "CSYNTHETIC01",
+    "sourceEventId": "4a897715242d51204c9b4bc6f04d200cd428f1f082847544d868709bf54262be",
+    "messageTs": null,
+    "rootThreadTs": null
+  },
+  "arguments": {
+    "mode": "refresh_standard"
+  }
+}

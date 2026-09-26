@@ -1,0 +1,22 @@
+name: Report integration fixtures
+on:
+  pull_request:
+  push:
+    branches: [main, master, dev]
+permissions:
+  contents: read
+jobs:
+  reports:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run test:reports
+      - run: npm run build
+      - run: npm run test:reports:api
+      - run: npx tsc --noEmit --incremental false
+      - run: python3 -m py_compile runtime/runner.py runtime/reports.py runtime/report_package.py

@@ -1,0 +1,171 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "runId",
+    "sha256",
+    "status",
+    "sheets"
+  ],
+  "properties": {
+    "runId": {
+      "type": "string"
+    },
+    "sha256": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "passed",
+        "failed"
+      ]
+    },
+    "sheets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Summary",
+        "GA4 Detail",
+        "GA4 Daily",
+        "GA4 Pages",
+        "First-Party Detail",
+        "Methodology"
+      ],
+      "properties": {
+        "Summary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          }
+        },
+        "GA4 Detail": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          }
+        },
+        "GA4 Daily": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          }
+        },
+        "GA4 Pages": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          }
+        },
+        "First-Party Detail": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          }
+        },
+        "Methodology": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          }
+        }
+      }
+    }
+  }
+}

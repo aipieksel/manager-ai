@@ -1,0 +1,27 @@
+[Unit]
+Description=ManagerAI private report runtime
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/dev/repos/managerai
+Environment=MANAGERAI_REPORT_BIND=172.17.0.1
+Environment=MANAGERAI_REPORT_PORT=13019
+Environment=MANAGERAI_REPORT_CONFIG=%h/.config/managerai-reports/reports.json
+Environment=MANAGERAI_REPORT_STATE_DIR=%h/.local/share/managerai-reports/jobs
+EnvironmentFile=%h/.config/managerai-reports/service.env
+ExecStart=/usr/bin/python3 %h/dev/repos/managerai/runtime/report-server.py
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+# Filesystem namespaces in an unprivileged systemd user unit enter the
+# host unprivileged_userns AppArmor profile and block nested Bubblewrap.
+# The fixed executor supplies its own read-only, networkless filesystem
+# namespace; acquisition and authenticated review remain outside it.
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=default.target
