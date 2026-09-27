@@ -1,13 +1,18 @@
 # Manager AI
 
-The repository is `manager-ai`; the application currently displays **Agent Command Center**.
 Maintained by [aipieksel](https://github.com/aipieksel). Upstream credits and licenses remain with their respective authors.
 
-An owner-only operations dashboard for receiving issues, reviewing an audit
-trail, and dispatching approved triage work to a constrained Codex manager
-runtime. The web application runs on OpenAI Sites/Cloudflare, stores operational
-data in D1, and can connect either to the bundled Linux runner or to a dedicated
-HTTPS manager endpoint.
+Manager AI is an owner-facing command center for receiving operational issues, reviewing what happened, and deciding which triage work to dispatch. The web interface currently displays **Agent Command Center**. It keeps tickets, audit events, setup jobs, and runtime settings in Cloudflare D1, and connects to a constrained Codex manager runtime for approved work.
+
+An issue can arrive manually or through a signed webhook. The owner reviews it in the dashboard before dispatching a named job to the bundled Linux runner or a dedicated HTTPS manager endpoint. Creating a ticket does not execute tools. The runner limits the available jobs and runs manager triage with a read-only sandbox.
+
+## Main workflow
+
+1. Sign in to the owner dashboard and review the incoming issue and audit trail.
+2. Configure the protected runner connection through Setup.
+3. Dispatch an approved triage job and inspect its bounded result before taking further action.
+
+The repository also contains a separately configured Slack workflow for historical AI referral reports. Its permissions, data, and delivery controls are described below; it is not required for basic issue triage.
 
 ## What is included
 
@@ -81,23 +86,9 @@ After deployment, sign in as the owner and open **Setup**:
 The runner URL is stored in D1. Its shared token remains a protected Site
 runtime value and is not stored through the browser.
 
-### VPS deployment
+### Self-hosted deployment
 
-The VPS deployment runs the Cloudflare worker locally under Wrangler/Workerd,
-which preserves the D1 API and stores its state outside the checkout. The
-provided [`deploy/managerai.service`](deploy/managerai.service) listens only on
-the Docker bridge at `172.17.0.1:13006`; the public reverse proxy must provide
-TLS and owner authentication.
-
-Set `LOCAL_PROXY_SECRET` in the private application environment and inject the
-same value as `x-managerai-proxy-secret` only after the reverse proxy has
-authenticated the owner. The proxy also injects
-`oai-authenticated-user-email`. Requests with a forged identity header but no
-matching proxy secret remain unauthenticated.
-
-Apply local D1 migrations with `scripts/migrate-vps.sh`. Persistent state belongs
-under `~/.local/share/managerai`, and the mode-`600` application environment
-belongs under `~/.config/managerai`; neither location is committed.
+The bundled [service unit](deploy/managerai.service) can run the Cloudflare worker under Wrangler/Workerd with persistent D1 state outside the checkout. Put it behind an HTTPS reverse proxy that authenticates the owner. The application requires a private proxy secret on identity-bearing requests, so a client cannot become the owner by forging an identity header. Apply migrations with `scripts/migrate-vps.sh` and keep runtime state and secrets outside Git. Review the service and proxy configuration for your own host before enabling it.
 
 ## Webhook contract
 
@@ -133,64 +124,24 @@ Drizzle ORM.
 
 ## Assistant AI referral reports
 
-The report-only workflow accepts `/ai-referrals` without arguments or a Assistant
-mention containing `generate AI referral report`. It generates the fixed
-Website six-sheet historical workbook, refreshes complete source snapshots,
-requires independent package and visual review, then uploads the XLSX in the
-originating Slack thread. The workbook completion message @mentions the original
-requester for both mentions and slash commands, using the persisted Slack user ID.
-Upload reconciliation does not send a second notification. Custom date ranges are not supported.
+An optional Slack workflow produces a historical AI referral workbook for an authorized requester. A `/ai-referrals` command or an Assistant mention starts a fixed six-sheet report, then posts the reviewed XLSX in the originating thread. The requester receives one completion mention; custom date ranges are not supported.
 
-Report configuration, requester grants, channel policy, jobs and delivery state
-use additive migration `drizzle/0008_ai_referral_reports.sql`. These permissions
-are separate from general Assistant channel/user access. Current deployment is
-restricted to members of the Slack channel you configure (for example, `C0123456789`). Membership is checked
-at admission, reconciliation and delivery using paginated Slack membership data.
-An example channel-scoped grant is `channel:C0123456789`; configure grants for your own environment. There are no bundled
-individual requester grants. Settings expose these grants through
-`memberChannelIds`, restricted to configured report channels. Enablement verifies the
-pinned runtime/reference/configuration and current internal channel membership.
-The Slack app requires `commands`, `files:write`, `files:read`, `channels:read`
-and `groups:read` in addition to its existing bot scopes; scope changes require
-reauthorizing the existing installation.
+This workflow has its own requester grants and channel policy, separate from general Assistant access. Configure allowed channels and membership checks before enabling it. The Slack app needs `commands`, `files:write`, `files:read`, `channels:read`, and `groups:read`; changed scopes require reauthorization. Report jobs, source snapshots, reviews, and delivery state are stored durably so a retry does not blindly upload a second workbook.
 
-`deploy/managerai-reports.service` runs `runtime/report-server.py` on a private
-listener (installed port 13019). Set `MANAGERAI_REPORT_RUNTIME_URL` and
-`MANAGERAI_REPORT_RUNTIME_TOKEN` in the private application environment, and
-`MANAGERAI_REPORT_INBOX` in the Slack worker environment. The inbox value is a
-directory containing its SQLite spool. Report configuration and credentials
-belong under the service account's `.config/managerai-reports`; jobs and review
-evidence belong under `.local/share/managerai-reports`. Keep secrets mode600.
-No WordPress/LocalWP database migration is involved.
+The report service uses `runtime/report-server.py` and the `deploy/managerai-reports.service` unit. Keep its runtime URL, token, inbox, configuration, and credentials in private service settings. Workbook execution uses openpyxl, LibreOffice, and pdftoppm; Bubblewrap confines it to read-only sources and a writable job directory. An independent review checks package evidence before release.
 
-The production executor uses openpyxl, LibreOffice and pdftoppm. Bubblewrap
-restricts workbook execution to read-only sources and a writable job directory,
-without network or private configuration access. On the installed Ubuntu host,
-additional systemd user filesystem namespaces conflict with nested Bubblewrap;
-the unit keeps process restrictions and uses Bubblewrap for workbook isolation.
-Independent review uses the existing authenticated Codex runtime and signs a
-hash-bound review receipt. Executor hashes and complete source provenance are
-checked before release.
-
-Report HTTP calls use manual redirect handling and reject non-success responses;
-Workerd does not support the `error` redirect mode used by ordinary Node fetch.
-Durable invocation keys, leases and upload reconciliation prevent blind duplicate
-publication. Uncertain exhausted requests remain held for explicit recovery.
-An unchanged enabled configuration does not expire between daily requests.
-Use `npm run test:reports` and, after building, `npm run test:reports:api` for the
-focused regression suites. Actual Slack delivery remains a separate acceptance
-check from those fixtures.
+Run `npm run test:reports` and, after building, `npm run test:reports:api` for the focused local checks. Live Slack delivery still needs separate verification in your configured environment.
 
 ## Starter registry and fresh data
 
-Copy `config/vps-projects.example.json` to the ignored `config/vps-projects.json` and replace the synthetic paths and endpoints. `node scripts/seed-vps-projects.mjs config/vps-projects.example.json` emits SQL to stdout only; inspect it before applying it to a database. The example reads no private environment files. The sample Slack persona is Assistant, and the generic website report contract is `site.ai_referrals`. These sanitized migrations target a fresh database; this package does not claim an automatic migration from an earlier private installation.
+Copy `config/vps-projects.example.json` to the ignored `config/vps-projects.json` and replace the example paths and endpoints. `node scripts/seed-vps-projects.mjs config/vps-projects.example.json` emits SQL to stdout; inspect it before applying it to a database. The included migrations target a fresh database and do not migrate an earlier private installation automatically.
 
 The owner-original source is licensed under [MIT](LICENSE). Preserve dependency and font notices.
 
 `SITE_URL` configures absolute share-card URLs. `.openai/hosting.json` contains generic binding names only; attach your own hosting project before any separately authorized deployment.
 
-## Local verification and remaining work
+## Verification boundaries
 
-Compilation, report suites, app/auth rendering, report API integration, intake gateway tests, and synthetic registry seeding have been checked locally. Live Slack/provider delivery and a configured production portal have not been verified.
+The included tests cover app/auth rendering, report API integration, intake, report packaging, and seeded examples. They do not establish live Slack delivery or validate a production portal configured for your environment.
 
 See [asset provenance](ASSET-NOTICES.md). Bundled fonts are Geist under the SIL Open Font License.
